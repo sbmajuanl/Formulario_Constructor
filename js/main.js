@@ -1,5 +1,4 @@
   window.addEventListener('load',function() {
-  var boton = document.getElementById('boton');
   var listado=[];// Guarda los datos del formulario
   boton.addEventListener('click',function(evento) {// Evento del boton al hacerle click
   evento.preventDefault();
@@ -7,41 +6,64 @@
   var nombre=document.getElementById("nombre").value;
   var apellido=document.getElementById("apellido").value;
   var edad=document.getElementById("edad").value;
-  var genero=document.getElementById("genero").value;
-  var ciudad=document.getElementById("ciudad").value;
   var pais=document.getElementById("pais").value;
-  var enviar=document.getElementById("enviar");
+  var pattern = /([A-Z]{1}[a-zá-ú]{1,}\s?)/;
+  var s_letras = /^[a-zñÑA-Z]*$/;
 
-function enviardatos(nombre,apellido,edad,pais){
+  function enviardatos(nombre,apellido,edad,pais){
     this.nombre=nombre;
     this.apellido=apellido;
     this.edad=edad;
     this.pais=pais;
     this.formulario=function(){
-    return "Nombre:"+this.nombre+"<br>"+
-            "Apellido:"+this.apellido+"</br>"+
-            "Edad :"+this.edad+"</br>"+
-            "Pais :"+this.pais;
-  }
+         var div=document.createElement("div");
+         div.classList.add("div-contenedor");
+         var p =document.createElement("p")
+         p.innerHTML+="Nombre:"+this.nombre+"<br>"+
+                    "Apellido:"+this.apellido+"</br>"+
+                       "Edad :"+this.edad+"</br>"+
+                       "Pais :"+this.pais;
+         div.appendChild(p);
+         return div;
+          };
    }
-   listado.push(new enviardatos(nombre,apellido,edad,pais));// pone los datos al final a traves del push
-   enviar.innerHTML= listado[listado.length-1].formulario();// Agrega los datos  y tiene -1 porque el ID comienza en uno
-   document.getElementById("formulario").reset() // Para que eliminen los datos del campo luego de enviar
+   var enviardatos=new enviardatos(nombre,apellido,edad,pais);
+   listado.push(enviardatos);
 
-    function printAll(arreglo){
-      var div = document.createElement('div');
-      div.setAttribute('class',"patient");
-      var p1 = document.createElement('p');
-      p1.innerHTML = "Nombre: " + arreglo.nombre + " " + arreglo.apellido
-      var p2 = document.createElement('p');
-      p2.innerHTML = "Edad: " + arreglo.edad
-      var p3 = document.createElement('p');
-      p3.innerHTML = "País: " + arreglo.pais
-      div.appendChild(p1);
-      div.appendChild(p2);
-      div.appendChild(p3);
-      return div;
+    if(nombre==""){
+     alert("Debe ingresar su nombre");
     }
-     enviar.appendChild(printAll(formulario));
+    else if (nombre.search(s_letras)){
+      alert("Ingrese solo letras en el nombre");
+     }
+    else if(nombre.search(pattern)){
+     alert("La primera letra del nombre debe ser mayúscula");
+    }
+    else if(apellido==""){
+      alert("Ingrese sus apellido");
+     }
+    else if (apellido.search(s_letras)){
+         alert("Ingrese solo letras en el apellido");
+    }
+    else if(apellido.search(pattern)){
+      alert("La primera letra del apellido solo debe ser mayúscula");
+    }
+    else if(edad==""){
+      alert("Ingrese su edad");
+    }
+    else if(pais==""){
+      alert("Debe completar su pais");
+    }
+    else if (pais.search(s_letras)){
+        alert("Ingrese solo letras en el país");
+     }
+    else if(pais.search(pattern)){
+      alert("La primera letra del país debe ser mayúscula");
+    }
+    else{
+      enviar.appendChild(enviardatos.formulario());
+      document.getElementById("foormulario").reset();
+    }
+
       });
-});
+    });
